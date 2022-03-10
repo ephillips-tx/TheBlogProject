@@ -8,7 +8,7 @@ namespace TheBlogProject.Models
     {
         public int Id { get; set; }
         public int PostId { get; set; }
-        public string AuthorId { get; set; } = String.Empty;
+        public string BlogUserId { get; set; } = String.Empty;
         public string ModeratorId { get; set; } = String.Empty;
 
         [Required]
@@ -29,8 +29,8 @@ namespace TheBlogProject.Models
 
         //Navigation properties
         public virtual Post? Post { get; set; }
-        public virtual IdentityUser? Author { get; set; }
-        public virtual IdentityUser? Moderator { get; set; }
+        public virtual BlogUser? BlogUser { get; set; }
+        public virtual BlogUser? Moderator { get; set; }
         //No ICollection because all of these are referencing "parent." Comment is only a "child" of other models. 
     }
 }
