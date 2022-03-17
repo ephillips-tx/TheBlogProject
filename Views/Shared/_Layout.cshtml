@@ -1,50 +1,137 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TheBlogProject</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TheBlogProject.styles.css" asp-append-version="true" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
+    <title>@ViewData["Title"] - Blog of Web Developer Eric Phillips</title>
+
+    <!-- Vendor css -->
+    <link href="/css/materialdesignicons.min.css" rel="stylesheet" />
+
+    <!-- Base css with customised bootstrap included -->
+    <link href="/css/miri-ui-kit-free.css" rel="stylesheet" />
+
+    <!-- Stylesheet for demo page specific css -->
+    <link  href="/css/demo.css" rel="stylesheet" >
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TheBlogProject</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+    <header class="miri-ui-kit-header landing-header header-bg-2">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-on-scroll">
+            <div class="container">
+                <a class="navbar-brand" href="index.html"><img src="/img/logo.svg" alt="logo"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#miriUiKitNavbar"
+                    aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="mdi mdi-menu"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+            
+                <div class="collapse navbar-collapse" id="miriUiKitNavbar">
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" href="http://bootstrapdash.com/demo/miri-ui-kit-pro/documentation/documentation.html" target="_blank">Docs</span></a>
                         </li>
+            
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" href="index.html">UI Kits</a>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                Example Pages
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right ">
+                                <a href="landing.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shape-outline"></i>Landing Page</a>
+                                <a href="login.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-lock-outline"></i>Login Page</a>
+                                <a href="profile.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shield-account-outline"></i>Profile Page</a>
+                            </div>
+                        </li>
+            
+                        <li class="nav-item">
+
+                            <a class="nav-link nav-icon icon-fb" href="#"><i class="mdi mdi-facebook-box"></i></a>
+
+                            <a class="nav-link nav-icon icon-twitter" href="#"><i class="mdi mdi-twitter-box"></i></a>
+    
+                            <a class="nav-link nav-icon icon-insta" href="#"><i class="mdi mdi-instagram"></i></a>
+                            
+                        </li>
+            
+                        <form action="#" class="form-inline ml-lg-3">
+                            <button class="btn btn-danger">Download Now</button>
+                        </form>
                     </ul>
-                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
+        <div
+            class="miri-ui-kit-header-content text-center text-white d-flex flex-column justify-content-center align-items-center">
+            <h1 class="display-3 text-white">Landing Page</h1>
+            <p class="h3 font-weight-light text-white">A beautiful premium bootstrap 4 developed by bootstrapdash.</p>
+            <p class="mt-4"><button class="btn btn-danger btn-pill mr-2">Watch
+                    Video</button> <button class="btn btn-success btn-pill">Purchase Now</button></p>
+        </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer class="pt-5 mt-2">
         <div class="container">
-            &copy; 2022 - TheBlogProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <section class="footer-content text-center">
+                <h2 class="">Clean and simple theme built with Bootstrap 4</h2>
+                <p>If there is something we can help you with, just let us know. We'll be more than happy to offer you
+                    our help.</p>
+                <button class="btn btn-success mt-3">Download Now</button>
+                <p class="footer-social-links text-center my-4">
+                    <a href="#" class="icon-fb"><i class="mdi mdi-facebook-box"></i></a>
+                    <a href="#" class="icon-twitter"><i class="mdi mdi-twitter-box"></i></a>
+                    <a href="#" class="icon-insta"><i class="mdi mdi-instagram"></i></a>
+                    <a href="#" class="icon-behance"><i class="mdi mdi-behance"></i></a>
+                    <a href="#" class="icon-dribbble"><i class="mdi mdi-dribbble-box"></i></a>
+                    <a href="#" class="icon-github"><i class="mdi mdi-github-circle"></i></a>
+                </p>
+            </section>
+            <nav class="navbar navbar-light bg-transparent navbar-expand d-block d-sm-flex text-center">
+                <span class="navbar-text">&copy; BootstrapDash. All rights reserved.</span>
+                <div class="navbar-nav ml-auto justify-content-center">
+                    <a href="#" class="nav-link">Support</a>
+                    <a href="#" class="nav-link">Terms</a>
+                    <a href="#" class="nav-link">Privacy</a>
+                </div>
+            </nav>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <div id="demoVideoLightbox" class="lightbox" onclick="hideVideo('video','youtube')">
+        <div class="lightbox-container">  
+          <div class="lightbox-content">
+            
+            <button data-close="lightbox" class="lightbox-close">
+              Close | ✕
+            </button>
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/eTlZLNws6zc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>      
+            
+          </div>
+        </div>
+      </div>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/miri-ui-kit.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
+
+
+
+
+
+
