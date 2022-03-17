@@ -8,8 +8,9 @@ namespace TheBlogProject.Models
     public class Post
     {
         public int Id { get; set; }
+        [Display(Name = "Blog Name")]
         public int BlogId { get; set; } // foreign key but primary key of Blog class
-        public string BlogUserId { get; set; } = String.Empty; // foreign key for writer of a Post | BlogUser = Author
+        public string? BlogUserId { get; set; } // foreign key for writer of a Post | BlogUser = Author
 
         [Required]
         [StringLength(75, ErrorMessage = "The {0} must be at least {2} and no more than {1} characters long.", MinimumLength = 2)] //{0} is the name of property

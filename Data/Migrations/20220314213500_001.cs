@@ -169,7 +169,7 @@ namespace TheBlogProject.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BlogUserId = table.Column<string>(type: "text", nullable: false),
+                    BlogUserId = table.Column<string>(type: "text", nullable: true),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -184,8 +184,7 @@ namespace TheBlogProject.Data.Migrations
                         name: "FK_Blogs_AspNetUsers_BlogUserId",
                         column: x => x.BlogUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -195,7 +194,7 @@ namespace TheBlogProject.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     BlogId = table.Column<int>(type: "integer", nullable: false),
-                    BlogUserId = table.Column<string>(type: "text", nullable: false),
+                    BlogUserId = table.Column<string>(type: "text", nullable: true),
                     Title = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
                     Abstract = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Content = table.Column<string>(type: "text", nullable: false),
@@ -213,8 +212,7 @@ namespace TheBlogProject.Data.Migrations
                         name: "FK_Posts_AspNetUsers_BlogUserId",
                         column: x => x.BlogUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Posts_Blogs_BlogId",
                         column: x => x.BlogId,

@@ -12,7 +12,7 @@ using TheBlogProject.Data;
 namespace TheBlogProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220310213416_001")]
+    [Migration("20220314213500_001")]
     partial class _001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -165,7 +165,6 @@ namespace TheBlogProject.Data.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BlogUserId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ContentType")
@@ -365,7 +364,6 @@ namespace TheBlogProject.Data.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("BlogUserId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Content")
@@ -489,9 +487,7 @@ namespace TheBlogProject.Data.Migrations
                 {
                     b.HasOne("TheBlogProject.Models.BlogUser", "BlogUser")
                         .WithMany("Blogs")
-                        .HasForeignKey("BlogUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BlogUserId");
 
                     b.Navigation("BlogUser");
                 });
@@ -533,9 +529,7 @@ namespace TheBlogProject.Data.Migrations
 
                     b.HasOne("TheBlogProject.Models.BlogUser", "BlogUser")
                         .WithMany("Posts")
-                        .HasForeignKey("BlogUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BlogUserId");
 
                     b.Navigation("Blog");
 
