@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>@ViewData["Title"] - Blog of Web Developer Eric Phillips</title>
 
     <!-- Vendor css -->
@@ -14,15 +14,19 @@
     <!-- Base css with customised bootstrap included -->
     <link href="/css/miri-ui-kit-free.css" rel="stylesheet" />
 
+    <!-- Summernote for contact text entering -->
+    <link href="/css/summernote-bs4.min.css" rel="stylesheet" />
+
     <!-- Stylesheet for demo page specific css -->
-    <link  href="/css/demo.css" rel="stylesheet" >
+    <link href="/css/demo.css" rel="stylesheet" />
 </head>
 
 <body>
     <header class="miri-ui-kit-header landing-header header-bg-2">
         <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-on-scroll">
             <div class="container">
-                <a class="navbar-brand" href="index.html"><img src="/img/logo.svg" alt="logo"></a>
+                <a class="navbar-brand h1" asp-controller="Home" asp-action="Index">Mental Expressions</a> @*Removed:img tag w/ logo*@
+                
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#miriUiKitNavbar"
                     aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="mdi mdi-menu"></span>
@@ -31,19 +35,19 @@
                 <div class="collapse navbar-collapse" id="miriUiKitNavbar">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="http://bootstrapdash.com/demo/miri-ui-kit-pro/documentation/documentation.html" target="_blank">Docs</span></a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
             
                         <li class="nav-item">
-                            <a class="nav-link" href="index.html">UI Kits</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="About">About</a>
                         </li>
 
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                                Example Pages
+                                Blog Sections
                             </a>
                             <div class="dropdown-menu dropdown-menu-right ">
-                                <a href="landing.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shape-outline"></i>Landing Page</a>
+                                <a asp-controller="Home" asp-action="Contact" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shape-outline"></i>Contact Me</a>
                                 <a href="login.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-lock-outline"></i>Login Page</a>
                                 <a href="profile.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shield-account-outline"></i>Profile Page</a>
                             </div>
@@ -60,43 +64,34 @@
                         </li>
             
                         <form action="#" class="form-inline ml-lg-3">
-                            <button class="btn btn-danger">Download Now</button>
+                            <button class="btn btn-danger">Mystery Link</button>
                         </form>
                     </ul>
                 </div>
             </div>
         </nav>
-        <div
-            class="miri-ui-kit-header-content text-center text-white d-flex flex-column justify-content-center align-items-center">
-            <h1 class="display-3 text-white">Landing Page</h1>
-            <p class="h3 font-weight-light text-white">A beautiful premium bootstrap 4 developed by bootstrapdash.</p>
-            <p class="mt-4"><button class="btn btn-danger btn-pill mr-2">Watch
-                    Video</button> <button class="btn btn-success btn-pill">Purchase Now</button></p>
+        <div class="miri-ui-kit-header-content text-center text-white d-flex flex-column justify-content-center align-items-center">
+            <h1 class="display-4 text-white">@ViewData["HeaderContent"]</h1> 
+            <p class="h4 font-weight-light text-white">@ViewData["HeaderSubContent"]</p>
+            @*<p class="mt-4">
+                <button class="btn btn-danger btn-pill mr-2">Watch Video</button> 
+                <button class="btn btn-success btn-pill">Purchase Now</button>
+            </p>*@
         </div>
     </header>
 
-    <main>
-        @RenderBody()
-    </main>
-
+    @RenderBody()
+   
     <footer class="pt-5 mt-2">
         <div class="container">
-            <section class="footer-content text-center">
-                <h2 class="">Clean and simple theme built with Bootstrap 4</h2>
-                <p>If there is something we can help you with, just let us know. We'll be more than happy to offer you
-                    our help.</p>
-                <button class="btn btn-success mt-3">Download Now</button>
-                <p class="footer-social-links text-center my-4">
+            <nav class="navbar navbar-light bg-transparent navbar-expand d-block d-sm-flex text-center">
+                <span class="navbar-text">&copy; Eric Phillips. All rights reserved.</span>
+                <p class="footer-social-links text-center ml-auto my-auto justify-content-center">
                     <a href="#" class="icon-fb"><i class="mdi mdi-facebook-box"></i></a>
                     <a href="#" class="icon-twitter"><i class="mdi mdi-twitter-box"></i></a>
                     <a href="#" class="icon-insta"><i class="mdi mdi-instagram"></i></a>
-                    <a href="#" class="icon-behance"><i class="mdi mdi-behance"></i></a>
-                    <a href="#" class="icon-dribbble"><i class="mdi mdi-dribbble-box"></i></a>
                     <a href="#" class="icon-github"><i class="mdi mdi-github-circle"></i></a>
                 </p>
-            </section>
-            <nav class="navbar navbar-light bg-transparent navbar-expand d-block d-sm-flex text-center">
-                <span class="navbar-text">&copy; BootstrapDash. All rights reserved.</span>
                 <div class="navbar-nav ml-auto justify-content-center">
                     <a href="#" class="nav-link">Support</a>
                     <a href="#" class="nav-link">Terms</a>
@@ -105,25 +100,12 @@
             </nav>
         </div>
     </footer>
-    <div id="demoVideoLightbox" class="lightbox" onclick="hideVideo('video','youtube')">
-        <div class="lightbox-container">  
-          <div class="lightbox-content">
-            
-            <button data-close="lightbox" class="lightbox-close">
-              Close | ✕
-            </button>
-            <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/eTlZLNws6zc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>      
-            
-          </div>
-        </div>
-      </div>
 
     <script src="/js/jquery.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/miri-ui-kit.js"></script>
+    <script src="/js/summernote-bs4.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -3180,13 +3180,14 @@ input[type="button"].btn-block {
             justify-content: space-between; }
 
 .navbar-brand {
-  display: inline-block;
-  padding-top: 0.3125rem;
-  padding-bottom: 0.3125rem;
-  margin-right: 1rem;
-  font-size: 1.25rem;
-  line-height: inherit;
-  white-space: nowrap; }
+    display: inline-block;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.3125rem;
+    margin-right: 1rem;
+    font-size: 1.25rem;
+    line-height: inherit;
+    white-space: nowrap;
+}
   .navbar-brand:hover, .navbar-brand:focus {
     text-decoration: none; }
 
@@ -8761,7 +8762,9 @@ footer {
 
 .fixed-on-scroll {
   -webkit-transition: background-color 0.3s ease-in-out;
-  transition: background-color 0.3s ease-in-out; }
+  transition: background-color 0.3s ease-in-out; 
+  color: white;
+}
   .fixed-on-scroll.fixed-on-top {
     box-shadow: 0 1px 10px rgba(151, 164, 175, 0.4); }
     .fixed-on-scroll.fixed-on-top .nav-link {
@@ -8770,6 +8773,9 @@ footer {
         color: #000000; }
     .fixed-on-scroll.fixed-on-top .navbar-toggler {
       color: #000000; }
+    .fixed-on-scroll.fixed-on-top .navbar-brand {
+        color: #000000;
+    }
 
 @-webkit-keyframes slideIn {
   0% {
