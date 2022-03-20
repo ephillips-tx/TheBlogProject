@@ -31,6 +31,9 @@ builder.Services.AddScoped<IBlogEmailSender, EmailService>();
 // Register Image Service
 builder.Services.AddScoped<IImageService, BasicImageService>();
 
+// Register Slug Service
+builder.Services.AddScoped<ISlugService, BasicSlugService>();
+
 var app = builder.Build();
 
 // Pull out registered DataService
@@ -39,7 +42,6 @@ var dataService = app.Services.CreateScope()
                               .GetRequiredService<DataService>();
 
 await dataService.ManageDataAsync();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

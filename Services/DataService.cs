@@ -31,7 +31,7 @@ namespace TheBlogProject.Services
             // 1st: seed a few roles into the system: reach out to DB and create roles
             await SeedRolesAsync();
 
-            // 2nd: Seed a few users into the system: reach out to DB and create users
+            // 2nd: Seed a few users into the system and assign roles to them
             await SeedUsersAsync();
 
         }
@@ -41,7 +41,7 @@ namespace TheBlogProject.Services
             // If already roles in system, do nothing. 
             if (_dbContext.Roles.Any()) return;
             
-            // Otherwise, make some roles
+            // Otherwise, make some roles | Looks in AspNetRoles table in db
             foreach(var role in Enum.GetNames(typeof(BlogRole)))
             {
                 // Need to use Role Manager to create roles
@@ -62,6 +62,7 @@ namespace TheBlogProject.Services
                 UserName = "ephillips.tx@gmail.com",
                 FirstName = "Eric",
                 LastName = "Phillips",
+                // DisplayName = "" is unused but was in the walkthrough for some reason?
                 PhoneNumber = "(817) 000-0000",
                 EmailConfirmed = true,
 

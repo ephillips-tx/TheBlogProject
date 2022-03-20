@@ -25,7 +25,7 @@
     <header class="miri-ui-kit-header landing-header header-bg-2">
         <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-on-scroll">
             <div class="container">
-                <a class="navbar-brand h1" asp-controller="Home" asp-action="Index">Mental Expressions</a> @*Removed:img tag w/ logo*@
+                <a class="navbar-brand h1" asp-controller="Home" asp-action="Index">Mental<br />Expressions</a> @*Removed:img tag w/ logo*@
                 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#miriUiKitNavbar"
                     aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,7 @@
                                 <a href="profile.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shield-account-outline"></i>Profile Page</a>
                             </div>
                         </li>
+                        
             
                         <li class="nav-item">
 
@@ -62,10 +63,8 @@
                             <a class="nav-link nav-icon icon-insta" href="#"><i class="mdi mdi-instagram"></i></a>
                             
                         </li>
-            
-                        <form action="#" class="form-inline ml-lg-3">
-                            <button class="btn btn-danger">Mystery Link</button>
-                        </form>
+                        
+                        <partial name="_LoginPartial" />
                     </ul>
                 </div>
             </div>
@@ -76,6 +75,9 @@
             @*<p class="mt-4">
                 <button class="btn btn-danger btn-pill mr-2">Watch Video</button> 
                 <button class="btn btn-success btn-pill">Purchase Now</button>
+                <form action="#" class="form-inline ml-lg-3">
+                    <button class="btn btn-danger">Mystery Link</button>
+                </form>
             </p>*@
         </div>
     </header>
