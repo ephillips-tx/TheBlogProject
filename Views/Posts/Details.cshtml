@@ -2,83 +2,49 @@
 
 @{
     ViewData["Title"] = "Details";
+    ViewData["HeaderContent"] = @Model.Title;
+    ViewData["HeaderSubContent"] = @Model.Abstract;
+
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Post</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Abstract)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Abstract)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReadyStatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReadyStatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Slug)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Slug)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageData)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageData)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ContentType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ContentType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Blog)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Blog.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BlogUser)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BlogUser.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                @Html.Raw(Model.Content)
+            </div>
+        </div>
+        <hr />
+
+        <article>
+            <div class="row">
+                <div class="col text-center fw-bold h3">
+                    Custom Post Tags
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-center">
+                    @foreach(var tag in Model.Tags)
+                    {
+                        <a  class="btn btn-warning btn-sm btn-outline-dark" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()">#@tag.Text</a>
+                    }
+                </div>
+            </div>
+        </article>
+
+        
+        <!-- Display comments related to this Post -->
+        <!-- Display image of the Comment's Author. -->
+
+
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</article>
+
+
+
+

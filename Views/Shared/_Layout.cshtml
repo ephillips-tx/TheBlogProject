@@ -14,11 +14,14 @@
     <!-- Base css with customised bootstrap included -->
     <link href="/css/miri-ui-kit-free.css" rel="stylesheet" />
 
-    <!-- Summernote for contact text entering -->
+    <!-- Summernote for contact text entering | JS is below-->
     <link href="/css/summernote-bs4.min.css" rel="stylesheet" />
 
     <!-- Stylesheet for demo page specific css -->
     <link href="/css/demo.css" rel="stylesheet" />
+
+    <!-- Custom Stylsheet -->
+    <link href="~/css/custom.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -52,7 +55,6 @@
                                 <a href="profile.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shield-account-outline"></i>Profile Page</a>
                             </div>
                         </li>
-                        
             
                         <li class="nav-item">
 
@@ -63,7 +65,7 @@
                             <a class="nav-link nav-icon icon-insta" href="#"><i class="mdi mdi-instagram"></i></a>
                             
                         </li>
-                        
+                        <!-- _loginPartial is a partial view with links that allow users to register, login, or logout. -->
                         <partial name="_LoginPartial" />
                     </ul>
                 </div>
@@ -102,12 +104,20 @@
             </nav>
         </div>
     </footer>
-
+    s
+    <!-- Bootstrap & Core Javascript -->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/miri-ui-kit.js"></script>
+
+    <!-- Summernote -->
     <script src="/js/summernote-bs4.min.js"></script>
+
+    <!-- SweetAlert 2 - Errors -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Customer scripts for this template -->
+    <script src="/js/miri-ui-kit.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
