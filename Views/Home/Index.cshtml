@@ -1,56 +1,60 @@
-﻿
+﻿@using TheBlogProject.Services
+@using TheBlogProject.Models
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+
+@inject IImageService imageService
+@model IPagedList<Blog>
+
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <section class="miri-ui-kit-section">
     <div class="container">
-        <div class="row">
-            <div class="col-md-6 d-flex flex-column justify-content-center">
-                <h6 class="text-warning mb-3">Blogs</h6>
-                    <h2 class="h1 font-weight-semibold mb-4">
-                        Post Title?
-                    </h2>
-                    <p class="mb-5">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed esse doloremque
-                        nostrum, fuga fugit minima quod delectus magni explicabo quis aliquam laborum molestiae sint
-                        voluptatum ea beatae sunt rerum! Saepe.
-                    </p>
-                    <a asp-controller="Posts" asp-action="Details" asp-route-id="1" class="btn btn-primary">Learn more</a>
-            </div>
-            <div class="col-md-6 text-right"><img src="~/img/about.png" alt="About" class="img-fluid"></div>
+        <div class="row grid-margin mx-auto">
+            @foreach(var blog in Model)
+            {
+                <div class="col-lg-4 d-flex align-items-stretch">
+                    <div class="card">
+                        <img src="@imageService.DecodeImage(blog.ImageData, blog.ContentType)" class="img-fluid card-img-top" alt="post" />
+                        <div class="card-body">
+                            <h5>@blog.Name</h5>
+                            <p>@blog.Description</p>
+                            <a asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id" class="text-success">Read Blog</a>
+                        </div>
+                        <div class="card-footer bg-white d-flex align-items-center">
+                            Authored by&nbsp;
+                            <a href="#">@blog.BlogUser.FullName</a>&nbsp;
+                            on @blog.Created.ToString("MMM dd, yyyy")
+
+                            @*<img src="assets/images/face_6.jpg" width="30" class="img-fluid rounded-circle" alt="">
+                            <span class="ml-2 small">Leroy Reyes</span>
+                            <span class="badge badge-danger ml-auto">NEWS</span>*@
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </section>
 
-<section class="miri-ui-kit-section contact-section">
-    <div class="container">
-        <h2 class="text-center mb-4">Contact us</h2>
-        <p class="text-center mb-4 pb-3">
-            If there is something we can help you with, just let us know. We'll <br />
-            be more than happy to offer you our help.
-        </p>
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <form action="/" class="contact-form">
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <input type="text" class="form-control form-control-pill" placeholder="Default">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <input type="text" class="form-control form-control-pill" placeholder="Email@example.com">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <input type="text" class="form-control form-control-pill" placeholder="Contact-number">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <input type="submit" value="Send Message" class="btn btn-block btn-pill btn-primary">
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
+ @*Add paging controls here*@
+ <div class="container">
+     <div class="row">
+         <div class="col h3">
+             Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+         </div>
+     </div>
+     <div class="row">
+         <div class="col">
+             @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), 
+                new PagedListRenderOptions
+                {
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                })
+         </div>
+     </div>
+</div>

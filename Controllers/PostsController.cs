@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using TheBlogProject.Data;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
+using TheBlogProject.Enums;
+using X.PagedList;
 
 namespace TheBlogProject.Controllers
 {
@@ -21,15 +23,39 @@ namespace TheBlogProject.Controllers
         private readonly UserManager<BlogUser> _userManager;
 
 
-        public PostsController(ApplicationDbContext context, 
-            ISlugService slugService, 
-            IImageService imageService, 
+        public PostsController(ApplicationDbContext context,
+            ISlugService slugService,
+            IImageService imageService,
             UserManager<BlogUser> userManager)
         {
             _context = context;
             _slugService = slugService;
             _imageService = imageService;
             _userManager = userManager;
+        }
+
+        public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
+        {
+            ViewData["SearchTerm"] = searchTerm;
+
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
+
+            var posts = _context.Posts.Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).AsQueryable();
+            if(searchTerm != null)
+            {
+                posts = posts.Where(
+                    p => p.Title.Contains(searchTerm) ||
+                    p.Abstract.Contains(searchTerm) ||
+                    p.Content.Contains(searchTerm) ||
+                    p.Comments.Any(c => c.Body.Contains(searchTerm) ||
+                                        c.ModeratedBody.Contains(searchTerm) ||
+                                        c.BlogUser.FirstName.Contains(searchTerm) ||
+                                        c.BlogUser.LastName.Contains(searchTerm) ||
+                                        c.BlogUser.Email.Contains(searchTerm)));
+            }
+            posts = posts.OrderByDescending(p => p.Created);
+            return View(await posts.ToPagedListAsync(pageNumber, pageSize));
         }
 
         // GET: Posts
@@ -39,19 +65,59 @@ namespace TheBlogProject.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // BlogPostIndex
+        public async Task<IActionResult> BlogPostIndex(int? id, int? page)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
+            var pageNumber = page ?? 1; // null coalescing operator
+            var pageSize = 5;
+
+            //var posts = _context.Posts.Where(p => p.BlogId == id).ToList();
+            var posts = await _context.Posts
+                         .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
+                         .OrderByDescending(p => p.Created)
+                         .ToPagedListAsync(pageNumber, pageSize);
+
+            return View(posts);
+        }
+
+        // GET: Posts/Details/5
+
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var post = await _context.Posts
+        //        .Include(p => p.Blog)
+        //        .Include(p => p.BlogUser)
+        //        .Include(p => p.Tags)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (post == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(post);
+        //}
+        public async Task<IActionResult> Details(string slug)
+        {
+            if (string.IsNullOrEmpty(slug))
+            {
+                return NotFound();
+            }
+
             var post = await _context.Posts
-                .Include(p => p.Blog)
-                .Include(p => p.BlogUser)
-                .Include(p => p.Tags)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                        .Include(p => p.Blog)
+                        .Include(p => p.BlogUser)
+                        .Include(p => p.Tags)
+                        .FirstOrDefaultAsync(m => m.Slug == slug);
             if (post == null)
             {
                 return NotFound();
@@ -97,15 +163,21 @@ namespace TheBlogProject.Controllers
                     validationError = true;
                     ModelState.AddModelError("", "The Title you provided cannot be used as it results in an empty slug.");
                 }
-
                 // Detect incoming duplicate Slugs
-                if (!_slugService.IsUnique(slug))
+                else if (!_slugService.IsUnique(slug))
                 {
                     validationError = true;
                     ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
                 }
 
-                if(validationError)
+                //else if(slug.Contains("test"))
+                //{
+                //    validationError = true;
+                //    ModelState.AddModelError("", "Oops, are you testing again??");
+                //    ModelState.AddModelError("Title", "The Title cannot contain the word test");
+                //}
+
+                if (validationError)
                 {
                     // Pass the tags back when we return to the View
                     ViewData["TagValues"] = string.Join(",", tagValues);

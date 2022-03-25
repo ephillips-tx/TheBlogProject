@@ -74,6 +74,15 @@
         <div class="miri-ui-kit-header-content text-center text-white d-flex flex-column justify-content-center align-items-center">
             <h1 class="display-4 text-white">@ViewData["HeaderContent"]</h1> 
             <p class="h4 font-weight-light text-white">@ViewData["HeaderSubContent"]</p>
+
+            <form asp-action="SearchIndex" asp-controller="Posts">
+                <div class="input-group mt-5">
+                    <input type="text" name="SearchTerm" class="form-control" placeholder="Search Term">
+                    <div class="input-group-append">
+                        <button class="btn btn-warning btn-block btn-sm btn-outline-dark" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
             @*<p class="mt-4">
                 <button class="btn btn-danger btn-pill mr-2">Watch Video</button> 
                 <button class="btn btn-success btn-pill">Purchase Now</button>
@@ -104,7 +113,7 @@
             </nav>
         </div>
     </footer>
-    s
+    
     <!-- Bootstrap & Core Javascript -->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/popper.min.js"></script>
