@@ -25,7 +25,7 @@
 </head>
 
 <body>
-    <header class="miri-ui-kit-header landing-header header-bg-2">
+    <header class="miri-ui-kit-header landing-header header-bg-2 mb-3">
         <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-on-scroll">
             <div class="container">
                 <a class="navbar-brand h1" asp-controller="Home" asp-action="Index">Mental<br />Expressions</a> @*Removed:img tag w/ logo*@
@@ -51,8 +51,11 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right ">
                                 <a asp-controller="Home" asp-action="Contact" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shape-outline"></i>Contact Me</a>
-                                <a href="login.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-lock-outline"></i>Login Page</a>
-                                <a href="profile.html" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shield-account-outline"></i>Profile Page</a>
+                                @if(User.IsInRole("Administrator"))
+                                {
+                                <a asp-controller="Blogs" asp-action="Create" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-lock-outline"></i>Create Blog</a>
+                                }
+                                <a asp-area="Identity" asp-page="/Account/Manage/Index" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shield-account-outline"></i>Profile Page</a>
                             </div>
                         </li>
             
@@ -92,9 +95,9 @@
             </p>*@
         </div>
     </header>
-
-    @RenderBody()
-   
+    <div class="container">
+        @RenderBody()
+    </div>
     <footer class="pt-5 mt-2">
         <div class="container">
             <nav class="navbar navbar-light bg-transparent navbar-expand d-block d-sm-flex text-center">

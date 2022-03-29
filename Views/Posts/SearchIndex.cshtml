@@ -20,32 +20,31 @@
     ViewData["headerSubContent"] = htmlBuilder;
 }
 
-<div class="container">
-    <div class="row">
-        @foreach(var post in Model)
-        {
-            <div class="col-sm-2 col-lg-4 mt-3">
-                <div class="card border-dark">
-                    <div class="card-body text-center">
-                        <div class="bg-warning">
-                            <hr>
-                            <h5 class="card-title">@post.Title</h5>
-                            <hr class="card-hr" />
-                        </div>
-                        <div>
-                            <p class="card-text">@post.Abstract</p>
-                        </div>
-                        <br />
-                        <div class="text-center">
-                            <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
-                        </div>
+<div class="row">
+    @foreach(var post in Model)
+    {
+        <div class="col-sm-2 col-lg-4 mt-3">
+            <div class="card border-dark">
+                <div class="card-body text-center">
+                    <div class="bg-warning">
+                        <hr>
+                        <h5 class="card-title">@post.Title</h5>
+                        <hr class="card-hr" />
                     </div>
-                    <img class="card-img-bottom" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" />
+                    <div>
+                        <p class="card-text">@post.Abstract</p>
+                    </div>
+                    <br />
+                    <div class="text-center">
+                        <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
+                    </div>
                 </div>
+                <img class="card-img-bottom" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" />
             </div>
-        }
-    </div>
+        </div>
+    }
 </div>
+
 
 <hr />
 

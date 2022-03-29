@@ -12,31 +12,29 @@
 }
 
 <section class="miri-ui-kit-section">
-    <div class="container">
-        <div class="row grid-margin mx-auto">
-            @foreach(var blog in Model)
-            {
-                <div class="col-lg-4 d-flex align-items-stretch">
-                    <div class="card">
-                        <img src="@imageService.DecodeImage(blog.ImageData, blog.ContentType)" class="img-fluid card-img-top" alt="post" />
-                        <div class="card-body">
-                            <h5>@blog.Name</h5>
-                            <p>@blog.Description</p>
-                            <a asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id" class="text-success">Read Blog</a>
-                        </div>
-                        <div class="card-footer bg-white d-flex align-items-center">
-                            Authored by&nbsp;
-                            <a href="#">@blog.BlogUser.FullName</a>&nbsp;
-                            on @blog.Created.ToString("MMM dd, yyyy")
+    <div class="row grid-margin mx-auto">
+        @foreach(var blog in Model)
+        {
+            <div class="col-lg-4 d-flex align-items-stretch">
+                <div class="card">
+                    <img src="@imageService.DecodeImage(blog.ImageData, blog.ContentType)" class="img-fluid card-img-top" alt="post" />
+                    <div class="card-body">
+                        <h5>@blog.Name</h5>
+                        <p>@blog.Description</p>
+                        <a asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id" class="text-success">Read Blog</a>
+                    </div>
+                    <div class="card-footer bg-white d-flex align-items-center">
+                        Authored by&nbsp;
+                        <a href="#">@blog.BlogUser.FullName</a>&nbsp;
+                        on @blog.Created.ToString("MMM dd, yyyy")
 
-                            @*<img src="assets/images/face_6.jpg" width="30" class="img-fluid rounded-circle" alt="">
-                            <span class="ml-2 small">Leroy Reyes</span>
-                            <span class="badge badge-danger ml-auto">NEWS</span>*@
-                        </div>
+                        @*<img src="assets/images/face_6.jpg" width="30" class="img-fluid rounded-circle" alt="">
+                        <span class="ml-2 small">Leroy Reyes</span>
+                        <span class="badge badge-danger ml-auto">NEWS</span>*@
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 </section>
 

@@ -12,9 +12,12 @@
 <div class="container">
     <h1>Index</h1>
 
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
+    @if (User.IsInRole("Administrator"))
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
     <table class="table">
         <thead>
             <tr>
@@ -33,7 +36,10 @@
                 <th>
                     @Html.DisplayNameFor(model => model.ImageData)
                 </th>
+                @if (User.IsInRole("Administrator"))
+                {
                 <th></th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -54,11 +60,14 @@
                 <td>
                     <img src="@imageService.DecodeImage(blog.ImageData, blog.ContentType)"  class="img-fluid" width="250" />
                 </td>
+                @if (User.IsInRole("Administrator"))
+                {
                 <td>
                     <a asp-action="Edit" asp-route-id="@blog.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@blog.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@blog.Id">Delete</a>
                 </td>
+                }
             </tr>
     }
         </tbody>

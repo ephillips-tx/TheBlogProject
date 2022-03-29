@@ -1,50 +1,85 @@
-﻿@model TheBlogProject.Models.Post
+﻿@using TheBlogProject.Services
+@using TheBlogProject.Models
+
+@inject IImageService imageService
+@model TheBlogProject.Models.Post
 
 @{
     ViewData["Title"] = "Details";
     ViewData["HeaderContent"] = @Model.Title;
     ViewData["HeaderSubContent"] = @Model.Abstract;
-
 }
 
 
-<article>
-    <div class="container">
+<article class="mt-4">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            @Html.Raw(Model.Content)
+        </div>
+    </div>
+    <hr />
+
+    <article>
         <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                @Html.Raw(Model.Content)
+            <div class="col text-center fw-bold h3">
+                Custom Post Tags
             </div>
         </div>
-        <hr />
-
-        <article>
-            <div class="row">
-                <div class="col text-center fw-bold h3">
-                    Custom Post Tags
-                </div>
+        <div class="row">
+            <div class="col text-center">
+                @foreach(var tag in Model.Tags)
+                {
+                    <a  class="btn btn-warning btn-sm btn-outline-dark" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()">#@tag.Text</a>
+                }
             </div>
-            <div class="row">
-                <div class="col text-center">
-                    @foreach(var tag in Model.Tags)
-                    {
-                        <a  class="btn btn-warning btn-sm btn-outline-dark" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()">#@tag.Text</a>
-                    }
-                </div>
-            </div>
-        </article>
+        </div>
+    </article>
 
         
-        <!-- Display comments related to this Post -->
-        <!-- Display image of the Comment's Author. -->
+    <!-- Display comments related to this Post -->
+    <!-- Display image of the Comment's Author. -->
 
 
-        <div>
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-            <a asp-action="Index">Back to List</a>
-        </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
     </div>
 </article>
 
+<hr />
 
+<div>
+    @if(User.Identity.IsAuthenticated)
+    {
+        <form asp-controller="Comments" asp-action="Create" method="post">
+            @Html.Hidden("PostId", Model.Id)
+            <div class="form-group">
+                <label class="h2 font-weight-bold">Add Comment</label>
+                <textarea name="body" class="form-control" rows="10"></textarea>
+            </div>
+                    
+            <button type="submit" class="btn btn-sm btn-block btn-dark">Comment</button>
+        </form>
+    }
+    else
+    {
+        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-block btn-sm btn-dark">Login to add comments.</a>
+    }
+</div>
 
+<hr />
+
+<span class="btn btn-sm btn-dark btn-block">@Model.Comments.Count COMMENT(S)</span>
+
+@foreach(var comment in Model.Comments)
+{
+    <div class="media media-border p-0 mb-2 bg-light">
+        <img class="mr-3 mt-3 rounded-circle" style="width:60px;" src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" />
+        <div class="media-body">
+            <h4>@comment.BlogUser.FullName</h4>
+            <small><i>Posted on @comment.Created.ToString("MMM dd, yyyy")</i></small>
+            <p>@comment.Body</p>
+        </div>
+    </div>
+}
 

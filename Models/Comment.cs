@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿#nullable disable
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using TheBlogProject.Enums;
 
@@ -8,13 +9,13 @@ namespace TheBlogProject.Models
     {
         public int Id { get; set; }
         public int PostId { get; set; }
-        public string BlogUserId { get; set; } = String.Empty;
-        public string ModeratorId { get; set; } = String.Empty;
+        public string BlogUserId { get; set; }
+        public string ModeratorId { get; set; }
 
         [Required]
         [StringLength(500, ErrorMessage = "The {0} must be at least {2} and no more than {1}.", MinimumLength = 2)]
         [Display(Name = "Comment")]
-        public string Body { get; set; } = String.Empty;
+        public string Body { get; set; }
 
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
@@ -23,14 +24,14 @@ namespace TheBlogProject.Models
 
         [StringLength(500, ErrorMessage = "The {0} must be at least {2} and no more than {1}.", MinimumLength = 2)]
         [Display(Name = "Moderated Comment")]
-        public string ModeratedBody { get; set; } = String.Empty;
+        public string ModeratedBody { get; set; }
 
         public ModerationType ModerationType { get; set; } //Limit # of reasons a moderator can use
 
         //Navigation properties
-        public virtual Post? Post { get; set; }
-        public virtual BlogUser? BlogUser { get; set; }
-        public virtual BlogUser? Moderator { get; set; }
+        public virtual Post Post { get; set; }
+        public virtual BlogUser BlogUser { get; set; }
+        public virtual BlogUser Moderator { get; set; }
         //No ICollection because all of these are referencing "parent." Comment is only a "child" of other models. 
     }
 }
