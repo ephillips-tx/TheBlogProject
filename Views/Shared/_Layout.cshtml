@@ -75,14 +75,14 @@
             </div>
         </nav>
         <div class="miri-ui-kit-header-content text-center text-white d-flex flex-column justify-content-center align-items-center">
-            <h1 class="display-4 text-white">@ViewData["HeaderContent"]</h1> 
-            <p class="h4 font-weight-light text-white">@ViewData["HeaderSubContent"]</p>
+            <h2 class="text-white">@ViewData["HeaderContent"]</h2> 
+            <h6 class="font-weight-light text-white">@ViewData["HeaderSubContent"]</h6>
 
             <form asp-action="SearchIndex" asp-controller="Posts">
-                <div class="input-group mt-5">
+                <div class="input-group mt-4 mt-lg-5 rounded-pill">
                     <input type="text" name="SearchTerm" class="form-control" placeholder="Search Term">
                     <div class="input-group-append">
-                        <button class="btn btn-warning btn-block btn-sm btn-outline-dark" type="submit">Search</button>
+                        <button class="btn btn-danger btn-block btn-sm btn-outline-dark rounded-pill" type="submit">Search</button>
                     </div>
                 </div>
             </form>

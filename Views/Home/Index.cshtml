@@ -1,10 +1,14 @@
 ﻿@using TheBlogProject.Services
 @using TheBlogProject.Models
+@using TheBlogProject.Enums
+@using Microsoft.AspNetCore.Identity
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
 
 @inject IImageService imageService
+@inject UserManager<BlogUser> userManager
+
 @model IPagedList<Blog>
 
 @{
@@ -15,24 +19,44 @@
     <div class="row grid-margin mx-auto">
         @foreach(var blog in Model)
         {
-            <div class="col-lg-4 d-flex align-items-stretch">
-                <div class="card">
-                    <img src="@imageService.DecodeImage(blog.ImageData, blog.ContentType)" class="img-fluid card-img-top" alt="post" />
-                    <div class="card-body">
-                        <h5>@blog.Name</h5>
-                        <p>@blog.Description</p>
-                        <a asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id" class="text-success">Read Blog</a>
-                    </div>
-                    <div class="card-footer bg-white d-flex align-items-center">
-                        Authored by&nbsp;
-                        <a href="#">@blog.BlogUser.FullName</a>&nbsp;
-                        on @blog.Created.ToString("MMM dd, yyyy")
+            <div class="col-sm-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+                <a asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id" class="text-decoration-none">
+                    <div class="card mb-2">
+                        <img class="img-fluid card-img-top" src="@imageService.DecodeImage(blog.ImageData, blog.ContentType)" alt="Blog image" />
+                        <div class="card-body text-dark">
+                            <h5 class="card-title">@blog.Name</h5>
+                            <hr class="card-hr" />
+                            <p class="card-text">
+                                @blog.Description
+                            </p>
+                            <br />
+                            <span class="text-center text-success">Read Blog</span>
+                        </div>
 
-                        @*<img src="assets/images/face_6.jpg" width="30" class="img-fluid rounded-circle" alt="">
-                        <span class="ml-2 small">Leroy Reyes</span>
-                        <span class="badge badge-danger ml-auto">NEWS</span>*@
+                        @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                        {
+                            <div class="text-center">
+                                <a asp-action="Create" asp-controller="Posts" asp-route-id="@blog.Id" class="btn btn-dark btn-sm btn-block mb-2">Create New Post</a>
+                            </div>
+                        }
+
+                        @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                        {
+                            <div class="text-center">
+                                <a asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id" class="btn btn-dark btn-sm btn-block mb-2">Edit Blog</a>
+                            </div>
+                        }
+
+                        <div class="card-footer bg-white d-flex align-items-center">
+                            <!-- Update below link to go to a list of posts by this Author/BlogUser -->
+                            <a href="#">
+                                <span class="font-italic text-dark">Authored by</span>&nbsp;
+                                @blog.BlogUser.FullName
+                            </a>
+                            &nbsp;on @blog.Created.ToString("MMM dd, yyyy")
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         }
     </div>

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
 
+
 namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
@@ -77,6 +78,7 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
 
             Username = userName;
             CurrentImage = _imageService.DecodeImage(user.ImageData, user.ContentType);
+           
 
             Input = new InputModel
             {

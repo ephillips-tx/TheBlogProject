@@ -1,10 +1,14 @@
 ﻿@using TheBlogProject.Services
 @using TheBlogProject.Models
+@using TheBlogProject.Enums
+@using Microsoft.AspNetCore.Identity
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
 
+@inject UserManager<BlogUser> userManager
 @inject IImageService imageService
+
 @model IPagedList<Post>
 
 @{
@@ -13,86 +17,63 @@
     ViewData["HeaderSubContent"] = "This page shows a list of posts.";
 }
 
-<div class="container">
-    <h1>Index</h1>
+<div class="row">
+    @foreach (var post in Model) 
+    {
+       // Is the logged in user the Author of this post? 
+       var isAuthor = false;
+       if (User.Identity.IsAuthenticated)
+        {
+            isAuthor = (post.BlogUserId == userManager.GetUserId(User));
+        }
 
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Image
-                </th>
-                <th>
-                    Title
-                </th>
-                <th>
-                    Abstract
-                </th>
-@*                <th>
-                    @Html.DisplayNameFor(model => model.Created)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Updated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReadyStatus)
-                </th>*@
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                <img src="@imageService.DecodeImage(item.ImageData, item.ContentType)" class="img-fluid" width="250" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Abstract)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Updated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReadyStatus)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="bg-danger">
+                        <hr class="card-hr" />
+                        <h5 class="card-title">@post.Title</h5>
+                        <hr class="card-hr" />
+                    </div>
+                    <div>
+                        <p class="card-text">@post.Abstract</p>
+                    </div>
+
+                    <br />
+                    <div class="text-center">
+                        <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
+                    </div>
+
+                    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                    {
+                        <div class="text-center">
+                            <a class="btn btn-success btn-sm btn-block border-dark" asp-action="Edit" asp-controller="Posts" asp-route-slug="@post.Id">Edit Post</a>
+                        </div>
+                    }
+                </div>
+                <img class="card-img-bottom" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" />
+            </div>
+        </div>
     }
-        </tbody>
-    </table>
 </div>
 
 <hr />
 
 @*Add paging controls here*@
- <div class="container">
-     <div class="row">
-         <div class="col h3">
-             Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-         </div>
-     </div>
-     <div class="row">
-         <div class="col">
-             @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), 
-                new PagedListRenderOptions
-                {
-                    LiElementClasses = new string[] { "page-item" },
-                    PageClasses = new string[] { "page-link" }
-                })
-         </div>
-     </div>
+<div class="row">
+    <div class="col h3">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </div>
 </div>
+<div class="row">
+    <div class="col">
+        @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = Model.FirstOrDefault().BlogId, page = page }), 
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+        })
+    </div>
+</div>
+
 

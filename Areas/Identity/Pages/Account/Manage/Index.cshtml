@@ -1,5 +1,8 @@
 ﻿@page
 @model IndexModel
+@using TheBlogProject.Enums;
+
+
 @{
     ViewData["Title"] = "Profile";
     ViewData["HeaderContent"] = "Profile Page";
@@ -32,8 +35,23 @@
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
-    <div class="col-md-6">
-        <img src="@Model.CurrentImage" class="img-fluid rounded-circle" width="400" />
+    <div class="col-md-6 justify-content-center text-center">
+        @if (Model.CurrentImage == null) Model.CurrentImage = "/img/defaultUserImage.png";
+        <img src="@Model.CurrentImage" class="img-fluid rounded-circle" width="300" />
+        <div class="m-2 font-weight-bolder">
+            @if (User.IsInRole(BlogRole.Moderator.ToString()))
+            {
+                <span>MODERATOR</span>
+            }
+            else if(User.IsInRole(BlogRole.Administrator.ToString()))
+            {
+                <span>ADMINISTRATOR</span>
+            }
+            else
+            {
+                <span>USER</span>
+            }
+        </div>
     </div>
 </div>
 @section Scripts {
