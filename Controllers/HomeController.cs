@@ -26,6 +26,7 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> Index(int? page)
         {
+            ViewData["HeaderImage"] = "/img/header-bg-2.jpg";
             ViewData["HeaderContent"] = "Mental Expressions by Eric Phillips";
             ViewData["HeaderSubContent"] = "Peeling away labels to identify the nature of things.";
 
@@ -54,6 +55,7 @@ namespace TheBlogProject.Controllers
 
         public IActionResult About()
         {
+            ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
             ViewData["HeaderContent"] = "About the creator";
             ViewData["HeaderSubContent"] = "Not THE CREATOR, just the one for this site.";
 
@@ -62,6 +64,7 @@ namespace TheBlogProject.Controllers
         // GET: 
         public IActionResult Contact()
         {
+            ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
             ViewData["HeaderContent"] = "Want to send me a message?";
             ViewData["HeaderSubContent"] = "Fill out the form below and I'll get back with you ASAP.";
 

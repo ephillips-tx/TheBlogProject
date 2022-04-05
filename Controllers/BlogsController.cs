@@ -30,6 +30,7 @@ namespace TheBlogProject.Controllers
         // GET: Blogs
         public async Task<IActionResult> Index()
         {
+            ViewData["HeaderImage"] = "/img/header-bg-2.jpg";
             ViewData["HeaderContent"] = "Blogs Index";
             ViewData["HeaderSubContent"] = "This should show a list of blogs";
             var applicationDbContext = _context.Blogs.Include(b => b.BlogUser);

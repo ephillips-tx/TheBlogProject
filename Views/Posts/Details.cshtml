@@ -1,24 +1,44 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using TheBlogProject.Services
-@using Newtonsoft.Json
 @using TheBlogProject.Enums
+@using TheBlogProject.Models
+@using TheBlogProject.ViewModels
+@using Newtonsoft.Json
 
-@model TheBlogProject.Models.Post
+@inject UserManager<BlogUser> _userManager
+@inject IImageService _imageService
 
-@inject UserManager<BlogUser> userManager
-@inject IImageService imageService
+@*@model TheBlogProject.Models.Post*@
+@model PostDetailViewModel
 
 @{
-    ViewData["Title"] = "Details";
-    ViewData["HeaderContent"] = @Model.Title;
-    ViewData["HeaderSubContent"] = @Model.Abstract;
+    // Is the logged in user the Author of this post? 
+    var isAuthor = false;
+    if (User.Identity.IsAuthenticated)
+    {
+        isAuthor = (Model.Post.BlogUserId == _userManager.GetUserId(User));
+    }
 }
 
 <!--Post content-->
 <article class="mt-4">
     <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-            @Html.Raw(Model.Content)
+        <div class="col-9 border-right">
+            @Html.Raw(Model.Post.Content)
+        </div>
+        <div class="col-3 text-center font-weight-bold h6">
+            <div class="card">
+                <img class="card-img-top" src="/img/tags.png" alt="Tags..." />
+                <div class="card-body">
+                    <h4 class="card-title">SYSTEM TAGS</h4>
+                    <div class="tagView">
+                        @foreach(var tag in Model.Tags)
+                        {
+                            <a asp-action="TagIndex" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag</a>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <hr />
@@ -27,27 +47,25 @@
         <div class="row">
             <div class="col text-center fw-bold h3">
                 Custom Post Tags
-            </div>
+            </div>        
         </div>
         <div class="row">
             <div class="col text-center">
                 @foreach(var tag in Model.Tags)
                 {
-                    <a  class="btn btn-warning btn-sm btn-outline-dark" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()">#@tag.Text</a>
+                    <a class="btn btn-warning btn-sm btn-outline-dark" asp-action="TagIndex" asp-route-tag="@tag">#@tag</a>
                 }
             </div>
         </div>
     </article>
 
-        
-    <!-- Display comments related to this Post -->
-    <!-- Display image of the Comment's Author. -->
-
-
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>
+    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+    {
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Post.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    }
 </article>
 
 <hr />
@@ -56,7 +74,7 @@
     @if(User.Identity.IsAuthenticated)
     {
         <form asp-action="Create" asp-controller="Comments" method="post">
-            @Html.Hidden("PostId", Model.Id)
+            @Html.Hidden("PostId", Model.Post.Id)
             <div class="form-group">
                 <label class="h2 font-weight-bold">Add Comment</label>
                 <textarea name="body" class="form-control" rows="7"></textarea>
@@ -73,14 +91,14 @@
 
 <hr />
 
-<button id="commentSection" class="btn btn-sm btn-dark btn-block">@Model.Comments.Count COMMENT(S)</button>
+<button id="commentSection" class="btn btn-sm btn-dark btn-block">@Model.Post.Comments.Count COMMENT(S)</button>
 
 @{ var counter = 0; }
-@foreach(var comment in Model.Comments)
+@foreach(var comment in Model.Post.Comments)
 {
     <div class="media border-danger p-3 m-2 bg-light">
         @{
-            var profileImage = imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType); 
+            var profileImage = _imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType); 
             if(profileImage is null) profileImage = "/img/defaultUserImage.png"; 
         }
         <img class="mr-3 mt-3 rounded-circle" style="width:60px;" src="@profileImage" />
@@ -106,7 +124,7 @@
 
             @if (string.IsNullOrEmpty(comment.Body))
             {
-                @*<p>@comment.Body</p>*@
+                <ins class="text-danger">[null]</ins>
             }
             else if (comment.Moderated is not null)
             {
@@ -120,7 +138,7 @@
             @****************************
                 RENDER THE EDIT BUTTON
             *****************************@
-            @if(comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
+            @if(comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == _userManager.GetUserId(User))
             {
                 <hr />
                 <button data-toggle="modal" data-target="@($"#editModal{counter}")" class="btn-sm btn-dark float-right font-weight-bold mb-1 mr-1">EDIT</button>

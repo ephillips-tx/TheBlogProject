@@ -6,16 +6,10 @@
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
 
-@inject UserManager<BlogUser> userManager
-@inject IImageService imageService
+@inject UserManager<BlogUser> _userManager
+@inject IImageService _imageService
 
 @model IPagedList<Post>
-
-@{
-    ViewData["Title"] = "Index";
-    ViewData["HeaderContent"] = "Posts";
-    ViewData["HeaderSubContent"] = "This page shows a list of posts.";
-}
 
 <div class="row">
     @foreach (var post in Model) 
@@ -23,17 +17,15 @@
        // Is the logged in user the Author of this post? 
        var isAuthor = false;
        if (User.Identity.IsAuthenticated)
-        {
-            isAuthor = (post.BlogUserId == userManager.GetUserId(User));
-        }
+       {
+           isAuthor = (post.BlogUserId == _userManager.GetUserId(User));
+       }
 
-        <div class="col-sm-6 col-lg-4">
-            <div class="card">
+        <div class="col-sm-6 col-lg-4 mb-3">
+            <div class="card h-100">
                 <div class="card-body text-center">
-                    <div class="bg-danger">
-                        <hr class="card-hr" />
-                        <h5 class="card-title">@post.Title</h5>
-                        <hr class="card-hr" />
+                    <div class="bg-danger media-border rounded mb-1">
+                        <h5 class="card-title my-3">@post.Title</h5>
                     </div>
                     <div>
                         <p class="card-text">@post.Abstract</p>
@@ -51,7 +43,7 @@
                         </div>
                     }
                 </div>
-                <img class="card-img-bottom" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" />
+                <img class="card-img-bottom" src="@_imageService.DecodeImage(post.ImageData, post.ContentType)" />
             </div>
         </div>
     }

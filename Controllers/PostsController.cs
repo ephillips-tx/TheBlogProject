@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBlogProject.Data;
 using TheBlogProject.Models;
+using TheBlogProject.ViewModels;
 using TheBlogProject.Services;
 using TheBlogProject.Enums;
 using X.PagedList;
@@ -54,7 +55,7 @@ namespace TheBlogProject.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // BlogPostIndex
+        // GET: BlogPostIndex
         public async Task<IActionResult> BlogPostIndex(int? id, int? page)
         {
             if (id == null)
@@ -71,31 +72,69 @@ namespace TheBlogProject.Controllers
                          .OrderByDescending(p => p.Created)
                          .ToPagedListAsync(pageNumber, pageSize);
 
+            ViewData["HeaderImage"] = "/img/header-bg-2.jpg";
+            ViewData["Title"] = "Blog Post Index";
+            ViewData["HeaderContent"] = "Index of Posts";
+            ViewData["HeaderSubContent"] = "This page shows a list of posts associated with this blog.";
+
             return View(posts);
         }
 
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(string slug)
         {
-            if (string.IsNullOrEmpty(slug))
-            {
-                return NotFound();
-            }
+            if (string.IsNullOrEmpty(slug)) return NotFound();
 
             var post = await _context.Posts
-                        .Include(p => p.Blog)
-                        .Include(p => p.BlogUser)
-                        .Include(p => p.Tags)
-                        .Include(p => p.Comments)
-                        .ThenInclude(c => c.BlogUser)
-                        .FirstOrDefaultAsync(m => m.Slug == slug);
-            if (post == null)
-            {
-                return NotFound();
-            }
+                .Include(p => p.BlogUser)
+                .Include(p => p.Tags)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.BlogUser)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.Moderator)
+                .FirstOrDefaultAsync(m => m.Slug == slug);
 
-            return View(post);
+            if (post == null) return NotFound();
+
+            var dataVM = new PostDetailViewModel()
+            {
+                Post = post,
+                Tags = _context.Tags
+                        .Select(t => t.Text.ToLower())
+                        .Distinct().ToList()
+            };
+            
+            ViewData["Title"] = "Post Detail Page";
+            ViewData["HeaderImage"] = _imageService.DecodeImage(post.ImageData, post.ContentType);
+            ViewData["HeaderContent"] = post.Title;
+            ViewData["HeaderSubContent"] = post.Abstract;
+
+            return View(dataVM);
         }
+
+
+
+        //public async Task<IActionResult> Details(string slug)
+        //{
+        //    if (string.IsNullOrEmpty(slug))
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var post = await _context.Posts
+        //        .Include(p => p.Blog)
+        //        .Include(p => p.BlogUser)
+        //        .Include(p => p.Tags)
+        //        .Include(p => p.Comments)
+        //        .ThenInclude(c => c.BlogUser)
+        //        .FirstOrDefaultAsync(m => m.Slug == slug);
+        //    if (post == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(post);
+        //}
 
         // GET: Posts/Create
         public IActionResult Create()

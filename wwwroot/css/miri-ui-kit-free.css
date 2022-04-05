@@ -8369,24 +8369,26 @@ footer {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     flex-direction: column;
-    background-image: url("/img/header-bg-1.jpg");
     /*height: 576px;*/
     height: 500px;
     background-size: cover;
     background-repeat: no-repeat;
 }
-  .miri-ui-kit-header .miri-ui-kit-header-content {
+.miri-ui-kit-header .miri-ui-kit-header-content {
     margin-top: auto;
     margin-bottom: auto;
     -webkit-transform: translateY(-30px);
-            transform: translateY(-30px); }
-  .miri-ui-kit-header.header-navbar-only {
-    height: auto; }
-  .miri-ui-kit-header.header-no-bg-img {
-    background-image: none; }
-    .miri-ui-kit-header.header-bg-2 {
-        background-image: url("/img/header-bg-2.jpg");
-    }
+            transform: translateY(-30px); 
+}
+.miri-ui-kit-header.header-navbar-only {
+    height: auto; 
+}
+/*.miri-ui-kit-header.header-no-bg-img {
+    background-image: none; 
+}
+.miri-ui-kit-header.header-bg-2 {
+    background-image: url("/img/header-bg-2.jpg");
+}*/
 
 .lightbox {
   background-color: rgba(0, 0, 0, 0.8);
