@@ -9,11 +9,6 @@ using TheBlogProject.ViewModels;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddDefaultUI()
     .AddDefaultTokenProviders()
@@ -24,6 +19,12 @@ builder.Services.AddRazorPages();
 // Register custom DataService class
 builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<BlogSearchService>();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseNpgsql(ConnectionService.GetConnectionString(builder.Configuration));
+});
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Register a preconfigured instance of the MailSettings class
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));

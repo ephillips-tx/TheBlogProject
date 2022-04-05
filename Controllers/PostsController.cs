@@ -112,30 +112,6 @@ namespace TheBlogProject.Controllers
             return View(dataVM);
         }
 
-
-
-        //public async Task<IActionResult> Details(string slug)
-        //{
-        //    if (string.IsNullOrEmpty(slug))
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var post = await _context.Posts
-        //        .Include(p => p.Blog)
-        //        .Include(p => p.BlogUser)
-        //        .Include(p => p.Tags)
-        //        .Include(p => p.Comments)
-        //        .ThenInclude(c => c.BlogUser)
-        //        .FirstOrDefaultAsync(m => m.Slug == slug);
-        //    if (post == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(post);
-        //}
-
         // GET: Posts/Create
         public IActionResult Create()
         {
@@ -179,13 +155,6 @@ namespace TheBlogProject.Controllers
                     validationError = true;
                     ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
                 }
-
-                //else if(slug.Contains("test"))
-                //{
-                //    validationError = true;
-                //    ModelState.AddModelError("", "Oops, are you testing again??");
-                //    ModelState.AddModelError("Title", "The Title cannot contain the word test");
-                //}
 
                 if (validationError)
                 {
