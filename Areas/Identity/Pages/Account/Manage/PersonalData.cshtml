@@ -2,10 +2,11 @@
 @model PersonalDataModel
 @{
     ViewData["Title"] = "Personal Data";
+    ViewData["HeaderContent"] = "Profile Page";
+    ViewData["HeaderSubContent"] = "Manage your personal data here.";
+    ViewData["HeaderImage"] = "/img/manage-bg.jpg";
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
-
-<h3>@ViewData["Title"]</h3>
 
 <div class="row">
     <div class="col-md-6">

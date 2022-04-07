@@ -1,4 +1,8 @@
-﻿option {
+﻿.input-group > .form-control::placeholder {
+    color: orange;
+}
+
+option {
     font-weight: bolder;
 }
 

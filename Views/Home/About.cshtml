@@ -1,11 +1,63 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model List<string>
 
-<div class="container">
-
-    <h1>The About Page</h1>
-
+<div class="row">
+    <div class="col-9">
+        <!-- About Me Section -->
+        <div class="row mb-3">
+            <div class="col-7">
+                <h1>Well howdy there!</h1>
+                <p class="h4 font-weight-normal mb-3">
+                    I live in Irving, Tx which is right in the heart of the Dallas-Fort Worth metroplex.
+                    This blog will serve as a platform for me to write about topics related to code, business strategy, philosophy, and potentially much more. 
+                    My interests are all over the place but I've decided to focus them into software development for the time. I'm currently looking for a junior developer role!
+                </p>
+            </div>
+            <div class="col-5">
+                <img src="~/img/m2blurry.png" class="img-fluid rounded mb-5" width="350" />
+                <div class="row text-center">
+                    <div class="col-6">
+                        <a href="https://ewp-portfolio.netlify.com" class="btn btn-sm btn-danger">Portfolio</a>
+                    </div>
+                    <div class="col-6">
+                        <a href="#" class="btn btn-sm btn-danger">Resum&eacute;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <p class="font-italic h6">
+                    <b class="text-primary">
+                        "To develop a complete mind: Study the science of art; Study the art of science. Learn how to see. 
+                        Realize that everything connects to everything else." 
+                    </b>
+                    <br />
+                    - <span class="font-weight-bolder"><i>Leonardo da Vinci</i></span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 text-center font-weight-bold h6">
+        <!-- Sidebar Content -->
+        <h2 class="m-2 font-weight-bolder">Topics</h2>
+        <hr />
+        <ul class="mb-4 list-unstyled">
+            <li><a href="#" class="text-decoration-none">Topic 1</a></li>
+            <li><a href="#" class="text-decoration-none">Topic 2</a></li>
+            <li><a href="#" class="text-decoration-none">Topic 3</a></li>
+        </ul>
+        <hr />
+        <div class="card">
+            <img class="card-img-top" src="/img/tags.png" alt="Tags..." />
+            <div class="card-body">
+                <h4 class="card-title">SYSTEM TAGS</h4>
+                <div class="tagView">
+                    @foreach(var tag in Model)
+                    {
+                        <a asp-action="TagIndex" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-danger btn-outline-dark">#@tag</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -26,23 +26,6 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> Index(int? page)
         {
-            ViewData["HeaderImage"] = "/img/header-bg-2.jpg";
-            ViewData["HeaderContent"] = "Mental Expressions by Eric Phillips";
-            ViewData["HeaderSubContent"] = "Peeling away labels to identify the nature of things.";
-
-            var pageNumber = page ?? 1;
-            var pageSize = 5;
-
-            //var blogs = _context.Blogs.Where(
-            //    b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
-            //    .OrderByDescending(b => b.Created)
-            //    .ToPagedListAsync(pageNumber, pageSize);
-
-            var blogs = _context.Blogs
-                .Include(b => b.BlogUser)
-                .OrderByDescending(b => b.Created)
-                .ToPagedListAsync(pageNumber, pageSize);
-
             // Previous Basic implementation without pagedList:
             // var blogs = await _context.Blogs
             //    .Include(b => b.BlogUser)
@@ -50,16 +33,35 @@ namespace TheBlogProject.Controllers
 
             // return View(blogs);
 
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
+
+
+            var blogs = _context.Blogs
+                .Include(b => b.BlogUser)
+                .OrderByDescending(b => b.Created)
+                .ToPagedListAsync(pageNumber, pageSize);
+
+            ViewData["HeaderImage"] = "/img/header-bg-2.png";
+            ViewData["HeaderContent"] = "Mental Expressions by Eric Phillips";
+            ViewData["HeaderSubContent"] = "Peeling away labels to identify the nature of things.";
+            ViewData["Title"] = "Home Page";
+
             return View(await blogs);
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
-            ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
-            ViewData["HeaderContent"] = "About the creator";
-            ViewData["HeaderSubContent"] = "Not THE CREATOR, just the one for this site.";
+            var allTags = _context.Tags
+                        .Select(t => t.Text.ToLower())
+                        .Distinct();
 
-            return View();
+            ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
+            ViewData["HeaderContent"] = "Hi! I'm Eric Phillips";
+            ViewData["HeaderSubContent"] = "I love building things with code.";
+            ViewData["Title"] = "About Me";
+
+            return View(await allTags.ToListAsync());
         }
         // GET: 
         public IActionResult Contact()

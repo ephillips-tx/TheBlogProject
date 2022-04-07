@@ -65,7 +65,6 @@ namespace TheBlogProject.Services
                 // DisplayName = "" is unused but was in the walkthrough for some reason?
                 PhoneNumber = "(817) 000-0000",
                 EmailConfirmed = true,
-
             };
 
             // Use the UserManager to create a new user that is defined by the adminUser variable
@@ -78,11 +77,11 @@ namespace TheBlogProject.Services
             // & use injected instance of configuration to pull the data out of the config file. 
             var modUser = new BlogUser()
             {
-                Email = "This@email.com",
-                UserName = "This@email.com",
-                FirstName = "Bob",
-                LastName = "Builder",
-                PhoneNumber = "(000) 000-0000",
+                Email = "ericphillips675@gmail.com",
+                UserName = "ericphillips675@gmail.com",
+                FirstName = "Eric",
+                LastName = "Phillips",
+                PhoneNumber = "(817) 000-0000",
                 EmailConfirmed = true
             };
 
