@@ -16,7 +16,7 @@
         @foreach(var blog in Model)
         {
             <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                <div class="card h-100">
+                <div class="card h-100 border-dark">
                     <a asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id" class="text-decoration-none">
                         <img class="img-fluid card-img-top" src="@imageService.DecodeImage(blog.ImageData, blog.ContentType)" alt="Blog image" />
                         <div class="card-body text-dark">

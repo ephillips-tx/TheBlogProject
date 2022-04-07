@@ -38,19 +38,17 @@
                 <div class="collapse navbar-collapse" id="miriUiKitNavbar">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-            
-                        <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="About">About</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Contact">Contact Me</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                                 Blog Sections
                             </a>
                             <div class="dropdown-menu dropdown-menu-right ">
-                                <a asp-controller="Home" asp-action="Contact" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shape-outline"></i>Contact Me</a>
+                                @*<a asp-controller="Home" asp-action="Contact" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shape-outline"></i>Contact Me</a>*@
                                 @if(User.IsInRole("Administrator"))
                                 {
                                 <a asp-controller="Blogs" asp-action="Create" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-lock-outline"></i>Create Blog</a>
@@ -58,15 +56,10 @@
                                 <a asp-area="Identity" asp-page="/Account/Manage/Index" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-shield-account-outline"></i>Profile Page</a>
                             </div>
                         </li>
-            
                         <li class="nav-item">
-
                             <a class="nav-link nav-icon icon-fb" href="https://linkedin.com/in/eric-phillips-04b92252"><i class="mdi mdi-linkedin"></i></a>
-
                             <a class="nav-link nav-icon icon-twitter" href="https://twitter.com/11EricWayne11"><i class="mdi mdi-twitter-box"></i></a>
-    
                             <a class="nav-link nav-icon icon-insta" href="https://github.com/ephillips-tx"><i class="mdi mdi-github-box"></i></a>
-                            
                         </li>
                         <!-- _loginPartial is a partial view with links that allow users to register, login, or logout. -->
                         <partial name="_LoginPartial" />
@@ -79,7 +72,7 @@
             <h6 class="font-weight-light text-white">@ViewData["HeaderSubContent"]</h6>
 
             <form asp-action="SearchIndex" asp-controller="Posts">
-                <div class="input-group mt-4 mt-lg-5 rounded-pill">
+                <div class="input-group mt-4 mt-lg-5 rounded-pill transparent">
                     <input type="text" name="SearchTerm" class="form-control" placeholder="Search Term">
                     <div class="input-group-append">
                         <button class="btn btn-danger btn-block btn-sm btn-outline-dark rounded-pill" type="submit">Search</button>
@@ -98,10 +91,10 @@
     <div class="container">
         @RenderBody()
     </div>
-    <footer class="pt-5 mt-2">
+    <footer class="mt-2">
         <div class="container">
             <nav class="navbar navbar-light bg-transparent navbar-expand d-block d-sm-flex text-center">
-                <span class="navbar-text">&copy; Eric Phillips. All rights reserved.</span>
+                <span class="navbar-text">&copy; Eric Phillips 2022. All rights reserved.</span>
                 <p class="footer-social-links text-center ml-auto my-auto justify-content-center">
                     @*<a href="#" class="icon-fb"><i class="mdi mdi-facebook-box"></i></a>*@
                     <a href="https://twitter.com/11EricWayne11" class="icon-twitter"><i class="mdi mdi-twitter-box"></i></a>
@@ -109,9 +102,9 @@
                     <a href="https://github.com/ephillips-tx" class="icon-github"><i class="mdi mdi-github-circle"></i></a>
                 </p>
                 <div class="navbar-nav ml-auto justify-content-center">
-                    <a href="#" class="nav-link">Support</a>
-                    <a href="#" class="nav-link">Terms</a>
-                    <a href="#" class="nav-link">Privacy</a>
+                    <a asp-action="Contact" asp-controller="Home" class="nav-link">Support</a>
+                    <a asp-action="Terms" asp-controller="Home" class="nav-link">Terms</a>
+                    <a asp-action="Privacy" asp-controller="Home" class="nav-link">Privacy</a>
                 </div>
             </nav>
         </div>
@@ -135,9 +128,3 @@
 </body>
 
 </html>
-
-
-
-
-
-

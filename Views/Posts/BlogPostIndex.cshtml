@@ -21,13 +21,14 @@
            isAuthor = (post.BlogUserId == _userManager.GetUserId(User));
        }
 
-        <div class="col-sm-6 col-lg-4 mb-3">
-            <div class="card h-100">
+       <div class="col-sm-6 col-lg-4 mb-3">
+            <div class="card h-100 border-dark">
                 <div class="card-body text-center">
                     <div class="bg-danger media-border rounded mb-1">
                         <h5 class="card-title my-3">@post.Title</h5>
                     </div>
                     <div>
+                        <hr class="card-hr" />
                         <p class="card-text">@post.Abstract</p>
                     </div>
 
@@ -45,7 +46,7 @@
                 </div>
                 <img class="card-img-bottom" src="@_imageService.DecodeImage(post.ImageData, post.ContentType)" />
             </div>
-        </div>
+       </div>
     }
 </div>
 

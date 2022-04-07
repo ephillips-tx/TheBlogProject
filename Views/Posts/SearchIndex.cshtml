@@ -15,36 +15,59 @@
     var htmlBuilder = new HtmlContentBuilder();
     htmlBuilder.AppendFormat("{1}  <ins><span class='text-danger' id='searchString'><em>{0}</em></span></ins>", ViewData["SearchTerm"], "You searched for:  ");
 
-    ViewData["Title"] = "Search Results";
-    ViewData["headerContent"] = "Search Results";
     ViewData["headerSubContent"] = htmlBuilder;
 }
 
 <div class="row">
-    @foreach(var post in Model)
-    {
-        <div class="col-sm-2 col-lg-4 mt-3">
-            <div class="card border-dark">
-                <div class="card-body text-center">
-                    <div class="bg-warning">
-                        <hr>
-                        <h5 class="card-title">@post.Title</h5>
-                        <hr class="card-hr" />
+    <div class="col-9">
+        <div class="row">
+            @foreach(var post in Model)
+            {
+            <div class="col-sm-2 col-lg-4 mt-3">
+                <div class="card h-100 border-dark">
+                    <div class="card-body text-center">
+                        <div class="bg-danger media-border rounded mb-1">
+                            <h5 class="card-title my-3">@post.Title</h5>
+                        </div>
+                        <div>
+                            <hr class="card-hr" />
+                            <p class="card-text">@post.Abstract</p>
+                        </div>
+                        <br />
+                        <div class="text-center">
+                            <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
+                        </div>
                     </div>
-                    <div>
-                        <p class="card-text">@post.Abstract</p>
-                    </div>
-                    <br />
-                    <div class="text-center">
-                        <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
-                    </div>
+                    <img class="card-img-bottom" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" />
                 </div>
-                <img class="card-img-bottom" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" />
+            </div>
+            }
+        </div>
+    </div>
+    <div class="col-3 text-center font-weight-bold h6">
+        <!-- Sidebar Content -->
+        <h2 class="m-2 font-weight-bolder">Topics</h2>
+        <hr />
+        <ul class="mb-4 list-unstyled">
+            <li><a href="#" class="text-decoration-none">Topic 1</a></li>
+            <li><a href="#" class="text-decoration-none">Topic 2</a></li>
+            <li><a href="#" class="text-decoration-none">Topic 3</a></li>
+        </ul>
+        <hr />
+        <div class="card">
+            <img class="card-img-top" src="/img/tags.png" alt="Tags..." />
+            <div class="card-body">
+                <h4 class="card-title">SYSTEM TAGS</h4>
+                <div class="tagView">
+                    @foreach(var tag in ViewBag.Tags)
+                    {
+                        <a asp-action="TagIndex" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-danger btn-outline-dark">#@tag</a>
+                    }
+                </div>
             </div>
         </div>
-    }
+    </div>
 </div>
-
 
 <hr />
 

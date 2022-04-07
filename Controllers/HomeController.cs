@@ -63,7 +63,7 @@ namespace TheBlogProject.Controllers
 
             return View(await allTags.ToListAsync());
         }
-        // GET: 
+        // GET: Home/Contact
         public IActionResult Contact()
         {
             ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
@@ -81,6 +81,28 @@ namespace TheBlogProject.Controllers
             model.Message = $"{model.Message} <hr/> Phone: {model.Phone}";
             await _emailSender.SendContactEmailAsync(model.Email, model.Name, model.Subject, model.Message);
             return RedirectToAction("Index");
+        }
+
+        // GET: Home/Privacy
+        public IActionResult Privacy()
+        {
+            ViewData["Title"] = "Privacy Policy";
+            ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
+            ViewData["HeaderContent"] = ViewData["Title"];
+            ViewData["HeaderSubContent"] = "Please read our privacy policy below.";
+
+            return View();
+        }
+
+        // GET: Home/Terms
+        public IActionResult Terms()
+        {
+            ViewData["Title"] = "Terms & Conditions";
+            ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
+            ViewData["HeaderContent"] = ViewData["Title"];
+            ViewData["HeaderSubContent"] = "Please read our Terms & Conditions below.";
+
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

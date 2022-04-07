@@ -39,12 +39,22 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
         {
+            ViewData["Title"] = "Search Results";
+            ViewData["HeaderImage"] = "/img/papasan-bg.jpg";
+            ViewData["headerContent"] = "Search Results";
             ViewData["SearchTerm"] = searchTerm;
 
             var pageNumber = page ?? 1;
-            var pageSize = 5;
+            var pageSize = 6;
 
-            var posts = _blogSearchService.Search(searchTerm);    
+            var posts = _blogSearchService.Search(searchTerm);
+
+            var allTags = _context.Tags
+                        .Select(t => t.Text.ToLower())
+                        .Distinct();
+
+            ViewBag.Tags = allTags;
+
             return View(await posts.ToPagedListAsync(pageNumber, pageSize));
         }
 
@@ -58,23 +68,25 @@ namespace TheBlogProject.Controllers
         // GET: BlogPostIndex
         public async Task<IActionResult> BlogPostIndex(int? id, int? page)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var pageNumber = page ?? 1; // null coalescing operator
-            var pageSize = 5;
+            var pageSize = 6;
 
-            //var posts = _context.Posts.Where(p => p.BlogId == id).ToList();
+            var blog = await _context.Blogs
+                            .FirstOrDefaultAsync(b => b.Id == id);   
+
+            //Only get "ProductionReady" posts 
             var posts = await _context.Posts
                          .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
                          .OrderByDescending(p => p.Created)
                          .ToPagedListAsync(pageNumber, pageSize);
 
-            ViewData["HeaderImage"] = "/img/header-bg-2.jpg";
-            ViewData["Title"] = "Blog Post Index";
-            ViewData["HeaderContent"] = "Index of Posts";
+            if (posts == null) return NotFound();
+
+            ViewData["HeaderImage"] = _imageService.DecodeImage(blog.ImageData, blog.ContentType);
+            ViewData["Title"] = $"{blog.Name} posts";
+            ViewData["HeaderContent"] = blog.Name;
             ViewData["HeaderSubContent"] = "This page shows a list of posts associated with this blog.";
 
             return View(posts);
