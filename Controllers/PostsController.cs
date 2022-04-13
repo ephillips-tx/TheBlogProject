@@ -87,11 +87,18 @@ namespace TheBlogProject.Controllers
 
             if (posts == null) return NotFound();
 
+            // Get Tags
+            var systemTags = await _context.Tags
+                        .Select(t => t.Text.ToLower())
+                        .Distinct().ToListAsync();
+            
+                         
             ViewData["HeaderImage"] = _imageService.DecodeImage(blog.ImageData, blog.ContentType);
             ViewData["Title"] = $"{blog.Name} posts";
             ViewData["HeaderContent"] = blog.Name;
             ViewData["HeaderSubContent"] = "This page shows a list of posts associated with this blog.";
             ViewData["BlogId"] = blog.Id;
+            ViewBag.Tags = systemTags;
 
             return View(posts);
         }

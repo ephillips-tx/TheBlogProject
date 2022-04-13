@@ -11,52 +11,67 @@
 
 @model IPagedList<Post>
 
-<div class="row">
-    @if (User.IsInRole(BlogRole.Administrator.ToString()))
-    {
-        <div class="col-12 d-flex justify-content-center mb-2">
-            <div class="text-center">
-                <a asp-action="Create" asp-controller="Posts" asp-route-id="@ViewData["BlogId"]" class="btn btn-dark btn-block mb-2">Create New Post</a>
-            </div>
-        </div>
-    }
+<div class="row w-100">
+    <div class="col-9">
+        <div class="row">
+            @foreach (var post in Model) 
+            {
+                //Is the logged in user the Author of this post? 
+                var isAuthor = false;
+                if (User.Identity.IsAuthenticated)
+                {
+                    isAuthor = (post.BlogUserId == _userManager.GetUserId(User));
+                }
+                <div class="col-6 mb-3">
+                    <div class="card h-100 border-dark">
+                        <div class="card-body text-center">
+                            <div class="bg-danger media-border rounded mb-1">
+                                <h5 class="card-title my-3">@post.Title</h5>
+                            </div>
+                            <div>
+                                <hr class="card-hr" />
+                                <p class="card-text">@post.Abstract</p>
+                            </div>
 
-    @foreach (var post in Model) 
-    {
-       // Is the logged in user the Author of this post? 
-       var isAuthor = false;
-       if (User.Identity.IsAuthenticated)
-       {
-           isAuthor = (post.BlogUserId == _userManager.GetUserId(User));
-       }
+                            <br />
+                            <div class="text-center">
+                                <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
+                            </div>
 
-       <div class="col-sm-6 col-lg-4 mb-3">
-            <div class="card h-100 border-dark">
-                <div class="card-body text-center">
-                    <div class="bg-danger media-border rounded mb-1">
-                        <h5 class="card-title my-3">@post.Title</h5>
-                    </div>
-                    <div>
-                        <hr class="card-hr" />
-                        <p class="card-text">@post.Abstract</p>
-                    </div>
-
-                    <br />
-                    <div class="text-center">
-                        <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
-                    </div>
-
-                    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
-                    {
-                        <div class="text-center">
-                            <a class="btn btn-success btn-sm btn-block border-dark" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
+                            @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                            {
+                                <div class="text-center">
+                                    <a class="btn btn-success btn-sm btn-block border-dark" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
+                                </div>
+                            }
                         </div>
+                        <img class="card-img-bottom" src="@_imageService.DecodeImage(post.ImageData, post.ContentType)" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-3 text-center font-weight-bold h6">
+         @if (User.IsInRole(BlogRole.Administrator.ToString()))
+         {
+             <div class="mb-2 text-center">
+                <a asp-action="Create" asp-controller="Posts" asp-route-id="@ViewData["BlogId"]" class="btn btn-success btn-block mb-2">Create New Post</a>
+             </div>
+             <hr />
+         }
+        <div class="card">
+            <img class="card-img-top" src="/img/tags.png" alt="Tags..." />
+            <div class="card-body">
+                <h4 class="card-title">SYSTEM TAGS</h4>
+                <div class="tagView">
+                    @foreach (var tag in ViewBag.Tags)
+                    {
+                        <a asp-action="TagIndex" asp-controller="Posts" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag</a>
                     }
                 </div>
-                <img class="card-img-bottom" src="@_imageService.DecodeImage(post.ImageData, post.ContentType)" />
             </div>
-       </div>
-    }
+        </div>
+    </div>
 </div>
 
 <hr />
