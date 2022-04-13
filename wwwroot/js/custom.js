@@ -68,6 +68,15 @@ function ReplaceTag(tag, index) {
     document.getElementById("TagList").options[index] = newOption;
 }
 
+function SelectBlog(blogId) {
+    if (blogId == null) console.log("blogId is null");
+
+    var blogList = document.getElementById("blogList");
+    blogIndex = blogId - 1;
+    blogList.selectedIndex = blogIndex;
+}
+SelectBlog(currentBlogId);
+
 // The search() function will detect either an empty or a duplicate tag on this post
 // & return an error string if an error is detected
 function search(str) {

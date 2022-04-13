@@ -61,7 +61,7 @@
                 <div class="tagView">
                     @foreach(var tag in ViewBag.Tags)
                     {
-                        <a asp-action="TagIndex" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-danger btn-outline-dark">#@tag</a>
+                        <a asp-action="TagIndex" asp-controller="Posts" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-danger btn-outline-dark">#@tag</a>
                     }
                 </div>
             </div>

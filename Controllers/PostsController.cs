@@ -61,7 +61,10 @@ namespace TheBlogProject.Controllers
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Posts.Include(p => p.Blog).Include(p => p.BlogUser);
+            var applicationDbContext = _context.Posts
+                                    .Include(p => p.Blog)
+                                    .Include(p => p.BlogUser);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -88,6 +91,32 @@ namespace TheBlogProject.Controllers
             ViewData["Title"] = $"{blog.Name} posts";
             ViewData["HeaderContent"] = blog.Name;
             ViewData["HeaderSubContent"] = "This page shows a list of posts associated with this blog.";
+            ViewData["BlogId"] = blog.Id;
+
+            return View(posts);
+        }
+
+        // GET: TagIndex
+        public async Task<IActionResult> TagIndex(string tag, int? page)
+        {
+            if (tag == null) return NotFound();
+
+            var pageNumber = page ?? 1; // null coalescing operator
+            var pageSize = 6;
+
+            //Only get "ProductionReady" posts where any tag matches the incoming tag
+            var posts = await _context.Posts
+                            .Include(p => p.Tags)
+                            .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady && p.Tags.Any(t => t.Text.ToLower() == tag.ToLower()))
+                            .OrderByDescending(p => p.Created)
+                            .ToPagedListAsync(pageNumber, pageSize);
+
+            if (posts == null) return NotFound();
+
+            ViewData["HeaderImage"] = "/img/header-bg-2.png";
+            ViewData["Title"] = "Tags";
+            ViewData["HeaderContent"] = tag.ToString();
+            ViewData["HeaderSubContent"] = "A list of posts with this tag.";
 
             return View(posts);
         }
@@ -116,7 +145,7 @@ namespace TheBlogProject.Controllers
                         .Distinct().ToList()
             };
             
-            ViewData["Title"] = "Post Detail Page";
+            ViewData["Title"] = post.Slug;
             ViewData["HeaderImage"] = _imageService.DecodeImage(post.ImageData, post.ContentType);
             ViewData["HeaderContent"] = post.Title;
             ViewData["HeaderSubContent"] = post.Abstract;
@@ -127,8 +156,15 @@ namespace TheBlogProject.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name"); // third parameter was "description" by default. 
+            ViewData["BlogList"] = new SelectList(_context.Blogs, "Id", "Name"); // third parameter was "description" by default. 
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["BlogId"] = RouteData.Values["id"];
+
+            ViewData["HeaderImage"] = "/img/login-bg.jpg";
+            ViewData["Title"] = "Create Post";
+            ViewData["HeaderContent"] = "Create Post";
+            ViewData["HeaderSubContent"] = "Write a post for this blog.";
+
             return View();
         }
 
@@ -170,6 +206,16 @@ namespace TheBlogProject.Controllers
 
                 if (validationError)
                 {
+                    // Pass the ViewData back when we return to the View
+                    ViewData["BlogList"] = new SelectList(_context.Blogs, "Id", "Name"); // third parameter was "description" by default. 
+                    ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
+                    ViewData["BlogId"] = RouteData.Values["id"];
+
+                    ViewData["HeaderImage"] = "/img/login-bg.jpg";
+                    ViewData["Title"] = "Create Post";
+                    ViewData["HeaderContent"] = "Create Post";
+                    ViewData["HeaderSubContent"] = "Write a post for this blog.";
+                    
                     // Pass the tags back when we return to the View
                     ViewData["TagValues"] = string.Join(",", tagValues);
                     return View(post);
@@ -192,10 +238,12 @@ namespace TheBlogProject.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+       
+                return RedirectToAction(nameof(BlogPostIndex));
             }
 
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
+            ViewData["BlogList"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
 
             return View(post);
         }
@@ -214,9 +262,15 @@ namespace TheBlogProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId); // removed "Description" fix drop down list to select blog name
+            ViewData["BlogList"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId); // removed "Description" fix drop down list to select blog name
             ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text)); // Use ViewData to load <select> list
-            
+            ViewData["BlogId"] = RouteData.Values["id"];
+
+            ViewData["HeaderImage"] = "/img/login-bg.jpg";
+            ViewData["Title"] = $"Edit - {post.Title}";
+            ViewData["HeaderContent"] = $"Edit Post: {post.Title}";
+            ViewData["HeaderSubContent"] = "Edit this post.";
+
             return View(post);
         }
 
@@ -262,6 +316,14 @@ namespace TheBlogProject.Controllers
                         {
                             ModelState.AddModelError("Title", "This title cannot be used as it results in a duplicate slug.");
                             ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text)); // Use ViewData to load <select> list
+
+                            ViewData["BlogId"] = post.BlogId;
+
+                            ViewData["HeaderImage"] = "/img/login-bg.jpg";
+                            ViewData["Title"] = $"Edit - {post.Title}";
+                            ViewData["HeaderContent"] = $"Edit Post: {post.Title}";
+                            ViewData["HeaderSubContent"] = "Edit this post.";
+
                             return View(post);
                         }
                     }
@@ -299,10 +361,18 @@ namespace TheBlogProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                ViewData["BlogId"] = post.BlogId;
+
+                return RedirectToAction("BlogPostIndex", new { id = post.BlogId });
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
+            ViewData["BlogList"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", post.BlogUserId);
+            ViewData["BlogId"] = post.BlogId;
+
+            ViewData["HeaderImage"] = "/img/login-bg.jpg";
+            ViewData["Title"] = $"Edit - {post.Title}";
+            ViewData["HeaderContent"] = $"Edit Post: {post.Title}";
+            ViewData["HeaderSubContent"] = "Edit this post.";
 
             return View(post);
         }

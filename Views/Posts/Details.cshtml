@@ -34,7 +34,7 @@
                     <div class="tagView">
                         @foreach(var tag in Model.Tags)
                         {
-                            <a asp-action="TagIndex" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag</a>
+                            <a asp-action="TagIndex" asp-controller="Posts" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag</a>
                         }
                     </div>
                 </div>
@@ -51,9 +51,9 @@
         </div>
         <div class="row">
             <div class="col text-center">
-                @foreach(var tag in Model.Tags)
+                @foreach(var tag in Model.Post.Tags)
                 {
-                    <a class="btn btn-warning btn-sm btn-outline-dark" asp-action="TagIndex" asp-route-tag="@tag">#@tag</a>
+                    <a class="btn btn-warning btn-sm btn-outline-dark" asp-action="TagIndex" asp-controller="Posts" asp-route-tag="@tag.Text">#@tag.Text</a>
                 }
             </div>
         </div>

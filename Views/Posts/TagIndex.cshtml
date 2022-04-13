@@ -12,15 +12,6 @@
 @model IPagedList<Post>
 
 <div class="row">
-    @if (User.IsInRole(BlogRole.Administrator.ToString()))
-    {
-        <div class="col-12 d-flex justify-content-center mb-2">
-            <div class="text-center">
-                <a asp-action="Create" asp-controller="Posts" asp-route-id="@ViewData["BlogId"]" class="btn btn-dark btn-block mb-2">Create New Post</a>
-            </div>
-        </div>
-    }
-
     @foreach (var post in Model) 
     {
        // Is the logged in user the Author of this post? 
@@ -49,7 +40,7 @@
                     @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
                     {
                         <div class="text-center">
-                            <a class="btn btn-success btn-sm btn-block border-dark" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
+                            <a class="btn btn-success btn-sm btn-block border-dark" asp-action="Edit" asp-controller="Posts" asp-route-slug="@post.Id">Edit Post</a>
                         </div>
                     }
                 </div>
@@ -69,7 +60,7 @@
 </div>
 <div class="row">
     <div class="col">
-        @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = Model.FirstOrDefault().BlogId, page = page }), 
+        @Html.PagedListPager(Model, page => Url.Action("TagIndex", new { id = Model.FirstOrDefault().BlogId, page = page }), 
         new PagedListRenderOptions
         {
             LiElementClasses = new string[] { "page-item" },
