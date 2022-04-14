@@ -56,16 +56,20 @@ namespace TheBlogProject.Controllers
                         .Select(t => t.Text.ToLower())
                         .Distinct();
 
+            var blogList = _context.Blogs.ToList();
+
+            ViewData["Title"] = "About Me";
             ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
             ViewData["HeaderContent"] = "Hi! I'm Eric Phillips";
             ViewData["HeaderSubContent"] = "I love building things with code.";
-            ViewData["Title"] = "About Me";
+            ViewBag.BlogList = blogList;
 
             return View(await allTags.ToListAsync());
         }
         // GET: Home/Contact
         public IActionResult Contact()
         {
+            ViewData["Title"] = "Contact";
             ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
             ViewData["HeaderContent"] = "Want to send me a message?";
             ViewData["HeaderSubContent"] = "Fill out the form below and I'll get back with you ASAP.";

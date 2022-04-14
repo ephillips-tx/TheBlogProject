@@ -23,18 +23,40 @@
 <!--Post content-->
 <article class="mt-4">
     <div class="row">
-        <div class="col-9 border-right">
+        <div class="col-12 col-lg-9 border-right">
+            @if (Model.Post.Updated is not null)
+            {
+                <div class="font-italic mb-2 rounded-pill bg-secondary text-white p-2 w-75 w-md-25"><small>This post was last updated on: @Model.Post.Updated.Value.ToString("MMM dd, yyyy")</small></div>
+            }
+            
             @Html.Raw(Model.Post.Content)
         </div>
-        <div class="col-3 text-center font-weight-bold h6">
+        <div class="col-12 col-lg-3 text-center font-weight-bold h6">
+            <!-- Sidebar Content -->
+            @if (User.IsInRole(BlogRole.Administrator.ToString()))
+            {
+                <div class="mb-2 text-center">
+                    <a asp-action="Create" asp-controller="Posts" asp-route-id="@Model.Post.BlogId" class="btn btn-success btn-block mb-2">Create New Post</a>
+                </div>
+                <hr />
+            }
+            <h2 class="text-center m-2 font-weight-bolder">Topics</h2>
+            <hr />
+            <ul class="text-center text-md-left mb-4 list-unstyled">
+                @foreach (var blog in ViewBag.BlogList)
+                {
+                    <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id" class="blogLink"><li class="rounded-pill p-2 mb-1">@blog.Name</li></a>
+                }
+            </ul>
+            <hr />
             <div class="card">
                 <img class="card-img-top" src="/img/tags.png" alt="Tags..." />
                 <div class="card-body">
-                    <h4 class="card-title">SYSTEM TAGS</h4>
+                    @*<h4 class="card-title">SYSTEM TAGS</h4>*@
                     <div class="tagView">
                         @foreach(var tag in Model.Tags)
                         {
-                            <a asp-action="TagIndex" asp-controller="Posts" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag</a>
+                            <a asp-action="TagIndex" asp-controller="Posts" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-danger btn-outline-dark">#@tag</a>
                         }
                     </div>
                 </div>
@@ -46,26 +68,26 @@
     <article>
         <div class="row">
             <div class="col text-center fw-bold h3">
-                Custom Post Tags
+                Associated Tags
             </div>        
         </div>
         <div class="row">
             <div class="col text-center">
                 @foreach(var tag in Model.Post.Tags)
                 {
-                    <a class="btn btn-warning btn-sm btn-outline-dark" asp-action="TagIndex" asp-controller="Posts" asp-route-tag="@tag.Text">#@tag.Text</a>
+                    <a class="btn btn-danger btn-sm btn-outline-dark" asp-action="TagIndex" asp-controller="Posts" asp-route-tag="@tag.Text">#@tag.Text</a>
                 }
             </div>
         </div>
     </article>
-
-    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
-    {
-        <div>
-            <a asp-action="Edit" asp-route-id="@Model.Post.Id">Edit</a> |
-            <a asp-action="Index">Back to List</a>
-        </div>
-    }
+    <div class="text-center text-md-left mt-2 mt-md-0">
+        @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn btn-sm btn-warning text-decoration-none">Edit</a>
+            <span>|</span>
+        }
+         <a asp-action="BlogPostIndex" asp-route-id="@Model.Post.BlogId" class="btn btn-sm btn-dark text-decoration-none">Back to List</a>
+    </div>
 </article>
 
 <hr />

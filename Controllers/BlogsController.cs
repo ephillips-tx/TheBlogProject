@@ -20,7 +20,9 @@ namespace TheBlogProject.Controllers
         private readonly IImageService _imageService;
         private readonly UserManager<BlogUser> _userManager;
 
-        public BlogsController(ApplicationDbContext context, IImageService imageService, UserManager<BlogUser> userManager)
+        public BlogsController(ApplicationDbContext context, 
+            IImageService imageService, 
+            UserManager<BlogUser> userManager)
         {
             _context = context;
             _imageService = imageService;
@@ -34,6 +36,7 @@ namespace TheBlogProject.Controllers
             ViewData["HeaderContent"] = "Blogs Index";
             ViewData["HeaderSubContent"] = "This should show a list of blogs";
             var applicationDbContext = _context.Blogs.Include(b => b.BlogUser);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -86,6 +89,7 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Blogs/Edit/5
+        [Authorize(Roles = "Administrator,Moderator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -98,7 +102,7 @@ namespace TheBlogProject.Controllers
             {
                 return NotFound();
             }
-            //ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", blog.BlogUserId); don't need this
+            
             return View(blog);
         }
 
@@ -145,6 +149,7 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Blogs/Delete/5
+        [Authorize(Roles = "Administrator,Moderator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

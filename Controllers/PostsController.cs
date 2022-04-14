@@ -13,6 +13,7 @@ using TheBlogProject.ViewModels;
 using TheBlogProject.Services;
 using TheBlogProject.Enums;
 using X.PagedList;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TheBlogProject.Controllers
 {
@@ -39,11 +40,6 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
         {
-            ViewData["Title"] = "Search Results";
-            ViewData["HeaderImage"] = "/img/papasan-bg.jpg";
-            ViewData["headerContent"] = "Search Results";
-            ViewData["SearchTerm"] = searchTerm;
-
             var pageNumber = page ?? 1;
             var pageSize = 6;
 
@@ -53,7 +49,15 @@ namespace TheBlogProject.Controllers
                         .Select(t => t.Text.ToLower())
                         .Distinct();
 
+            // Get blogs
+            var blogList = _context.Blogs.ToList();
+            
+            ViewData["Title"] = "Search Results";
+            ViewData["HeaderImage"] = "/img/papasan-bg.jpg";
+            ViewData["headerContent"] = "Search Results";
+            ViewData["SearchTerm"] = searchTerm;
             ViewBag.Tags = allTags;
+            ViewBag.BlogList = blogList;
 
             return View(await posts.ToPagedListAsync(pageNumber, pageSize));
         }
@@ -81,24 +85,29 @@ namespace TheBlogProject.Controllers
 
             //Only get "ProductionReady" posts 
             var posts = await _context.Posts
-                         .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
-                         .OrderByDescending(p => p.Created)
-                         .ToPagedListAsync(pageNumber, pageSize);
+                            .Include(p => p.BlogUser)
+                            .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
+                            .OrderByDescending(p => p.Created)
+                            .ToPagedListAsync(pageNumber, pageSize);
 
             if (posts == null) return NotFound();
 
             // Get Tags
-            var systemTags = await _context.Tags
+            var allTags = await _context.Tags
                         .Select(t => t.Text.ToLower())
                         .Distinct().ToListAsync();
-            
-                         
+
+            // Get blogs
+            var blogList = _context.Blogs.ToList();
+
+
             ViewData["HeaderImage"] = _imageService.DecodeImage(blog.ImageData, blog.ContentType);
             ViewData["Title"] = $"{blog.Name} posts";
             ViewData["HeaderContent"] = blog.Name;
             ViewData["HeaderSubContent"] = "This page shows a list of posts associated with this blog.";
             ViewData["BlogId"] = blog.Id;
-            ViewBag.Tags = systemTags;
+            ViewBag.Tags = allTags;
+            ViewBag.BlogList = blogList;
 
             return View(posts);
         }
@@ -113,6 +122,7 @@ namespace TheBlogProject.Controllers
 
             //Only get "ProductionReady" posts where any tag matches the incoming tag
             var posts = await _context.Posts
+                            .Include(p => p.BlogUser)
                             .Include(p => p.Tags)
                             .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady && p.Tags.Any(t => t.Text.ToLower() == tag.ToLower()))
                             .OrderByDescending(p => p.Created)
@@ -120,10 +130,20 @@ namespace TheBlogProject.Controllers
 
             if (posts == null) return NotFound();
 
+            // Get Tags
+            var allTags = await _context.Tags
+                        .Select(t => t.Text.ToLower())
+                        .Distinct().ToListAsync();
+
+            // Get blogs
+            var blogList = _context.Blogs.ToList();
+
             ViewData["HeaderImage"] = "/img/header-bg-2.png";
             ViewData["Title"] = "Tags";
-            ViewData["HeaderContent"] = tag.ToString();
+            ViewData["HeaderContent"] = $"#{tag.ToString()}";
             ViewData["HeaderSubContent"] = "A list of posts with this tag.";
+            ViewBag.Tags = allTags;
+            ViewBag.BlogList = blogList;
 
             return View(posts);
         }
@@ -151,16 +171,21 @@ namespace TheBlogProject.Controllers
                         .Select(t => t.Text.ToLower())
                         .Distinct().ToList()
             };
-            
+
+            // Get blogs
+            var blogList = _context.Blogs.ToList();
+
             ViewData["Title"] = post.Slug;
             ViewData["HeaderImage"] = _imageService.DecodeImage(post.ImageData, post.ContentType);
             ViewData["HeaderContent"] = post.Title;
             ViewData["HeaderSubContent"] = post.Abstract;
+            ViewBag.BlogList = blogList;
 
             return View(dataVM);
         }
 
         // GET: Posts/Create
+        [Authorize(Roles = "Administrator,Moderator")]
         public IActionResult Create()
         {
             ViewData["BlogList"] = new SelectList(_context.Blogs, "Id", "Name"); // third parameter was "description" by default. 
@@ -256,6 +281,7 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize(Roles = "Administrator,Moderator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -385,6 +411,7 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize(Roles = "Administrator,Moderator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

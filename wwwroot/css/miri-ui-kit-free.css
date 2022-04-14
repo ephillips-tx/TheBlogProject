@@ -455,7 +455,8 @@ pre {
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
-  margin-left: auto; }
+  margin-left: auto; 
+}
   @media (min-width: 576px) {
     .container {
       max-width: 540px; } }
@@ -467,7 +468,7 @@ pre {
       max-width: 960px; } }
   @media (min-width: 1200px) {
     .container {
-      max-width: 1140px; } }
+      max-width: 1350px; } }
 
 .container-fluid {
   width: 100%;
@@ -3135,12 +3136,19 @@ input[type="button"].btn-block {
     border-top-right-radius: 0; }
 
 .nav-pills .nav-link {
-  border-radius: 0.25rem; }
+    border-radius: 0.25rem;
+    color: black;
+}
+.nav-pills .nav-link:hover {
+    background-color: #343a40;
+    color: #fff;
+}
 
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
-  color: #ffffff;
-  background-color: #444bf8; }
+    color: #ffffff;
+    background-color: #dc3545;
+}
 
 .nav-fill .nav-item {
   -webkit-box-flex: 1;

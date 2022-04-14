@@ -2,9 +2,13 @@
 @model AccessDeniedModel
 @{
     ViewData["Title"] = "Access denied";
+    ViewData["HeaderImage"] = "/img/header-bg-1.jpg";
+    ViewData["HeaderContent"] = "Access Denied";
+    ViewData["HeaderSubContent"] = "You do not have access. Please contact the administrator to request access.";
 }
 
 <header>
     <h1 class="text-danger">@ViewData["Title"]</h1>
     <p class="text-danger">You do not have access to this resource.</p>
+    <a asp-action="Index" asp-controller="Home" class="btn btn-sm btn-dark text-warning text-decoration-none">Go Home.</a>
 </header>
